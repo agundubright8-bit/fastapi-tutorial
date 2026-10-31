@@ -11,8 +11,7 @@ from sqlalchemy.orm import Session
     The module uses the FastAPI framework and SQLAlchemy ORM for database interactions. It also utilizes the jose library for JWT encoding and decoding.
 '''
 # OAuth2PasswordBearer is a class provided by FastAPI that helps in implementing OAuth2 authentication. It is used to extract the access token from the request's Authorization header.
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
-
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 # The following constants are used for JWT token creation and verification. They are loaded from the application's configuration settings.  
 SECRET_KEY = settings.secret_key
