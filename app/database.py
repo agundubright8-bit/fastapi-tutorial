@@ -38,22 +38,3 @@ def get_db():
         db.close()
 
 
-
-# while True:
-#     try:
-#         conn = psycopg.connect(host='localhost', dbname='fastapi', user='postgres', password='brightag@21', row_factory=dict_row)
-#         cursor = conn.cursor()
-#         print("Database connection successful")
-#         break
-#     except Exception as error:
-#         print("Database connection failed")
-#         print("Error: ", error)
-#         time.sleep(5)
-
-# my_posts  = [{"title": "title of post 1", "content" : "content of post 1", "id": 1}, {"title": "favorite foods", "content": "I like Rice", "id": 2}]
-
-
-# def find_post(id):
-#     for post in my_posts:
-#         if post["id"] == id:
-#             return post

@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 
 from app.routers import vote
-from . import models
 from .database import engine
 from .routers import post, user, auth
 from .config import settings
@@ -12,8 +11,6 @@ from fastapi.middleware.cors import CORSMiddleware
     The application is structured into separate modules for posts, users, and authentication, allowing for better organization and maintainability of the codebase. The database models are created using SQLAlchemy ORM, and the application is configured using settings defined in the config module.    
 '''
 
-# The models.Base.metadata.create_all(bind=engine) line creates the database tables based on the defined SQLAlchemy models. It ensures that the necessary tables are created in the database if they do not already exist.
-models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 origins = [
@@ -38,7 +35,7 @@ app.include_router(vote.router)
 
 @app.get("/")
 def root():
-    return {"message" : "Hello World"}
+    return {"message" : "Hello world!"}
 
 
 

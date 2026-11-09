@@ -2,3 +2,7 @@ __pycache__/
 .env
 .venv/
 venv/
+.venv-win/
+.venv-linux/
+*.backup
+__pycache__/

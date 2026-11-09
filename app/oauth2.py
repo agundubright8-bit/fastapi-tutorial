@@ -23,45 +23,28 @@ ACCESS_TOKEN_EXPIRE_MINUTES = settings.access_token_expire_minutes
 def create_access_token(data: dict):
     to_encode = data.copy()
 
-    expire = datetime.now(timezone.utc) + timedelta(
-        minutes=ACCESS_TOKEN_EXPIRE_MINUTES
-    )
+    expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
 
-    encoded_jwt = jwt.encode(
-        to_encode,
-        SECRET_KEY,
-        algorithm=ALGORITHM
-    )
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
 
 # The verify_access_token function decodes and verifies a JWT access token. It checks if the token is valid, not expired, and contains the expected user information. If the token is invalid or expired, it raises an HTTPException with a 401 Unauthorized status code.
 def verify_access_token(token: str, credentials_exception):
     try:
-        payload = jwt.decode(
-            token,
-            SECRET_KEY,
-            algorithms=[ALGORITHM]
-        )
-
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id = payload.get("user_id")
         if user_id is None:
             raise credentials_exception
-
         token_data = schemas.TokenData(id=user_id)
-
     except JWTError:
         raise credentials_exception
-
     return token_data
 
 
 # The get_current_user function is a dependency that retrieves the currently authenticated user based on the provided JWT access token. It extracts the token from the request, verifies it, and fetches the corresponding user from the database. If the token is invalid or the user does not exist, it raises an HTTPException with a 401 Unauthorized status code.
-def get_current_user(
-    token: str = Depends(oauth2_scheme),
-    db: Session = Depends(database.get_db)
-):
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(database.get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -69,12 +52,12 @@ def get_current_user(
     )
 
     token_data = verify_access_token(token, credentials_exception)
-
     db_user = db.query(models.User).filter(
         models.User.id == token_data.id
     ).first()
 
     if db_user is None:
         raise credentials_exception
-
     return db_user
+
+    
